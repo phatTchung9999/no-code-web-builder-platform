@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 40px auto; padding: 20px;">
+
+    <!-- HEADER -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+        <div>
+            <h1>{{ project.name }}</h1>
+            <p style="color: #6b7280; margin-top: 6px;">
+                {{ project.description }}
+            </p>
+
+            <!-- Publish status -->
+            <p style="margin-top: 10px;">
+                Status:
+                <strong>
+                    {% if project.is_published %}
+                        Published
+                    {% else %}
+                        Draft
+                    {% endif %}
+                </strong>
+            </p>
+
+            <!-- Public URL -->
+            {% if project.is_published %}
+                <p style="margin-top: 10px;">
+                    Public URL:
+                    <a href="{% url 'public-homepage' project.slug %}" target="_blank">
+                        /site/{{ project.slug }}/
+                    </a>
+                </p>
+            {% endif %}
+        </div>
+
+        <!-- ACTIONS -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+
+            <!-- Publish Toggle -->
+            <form method="post" action="{% url 'project-toggle-publish' project.id %}">
+                {% csrf_token %}
+                <button type="submit" style="padding: 10px 14px; border-radius: 8px; border: none; background: #111827; color: white; cursor: pointer;">
+                    {% if project.is_published %}
+                        Unpublish Project
+                    {% else %}
+                        Publish Project
+                    {% endif %}
+                </button>
+            </form>
+
+            <!-- Create Page -->
+            <a href="{% url 'builder:page_create' project.id %}" 
+               style="padding: 10px 14px; border-radius: 8px; background: #2563eb; color: white; text-decoration: none; text-align: center;">
+                Create Page
+            </a>
+
+        </div>
+    </div>
+
+    <!-- PAGE LIST -->
+    <div style="margin-top: 40px;">
+        <h2>Pages</h2>
+
+        {% if pages %}
+            <div style="margin-top: 20px; display: grid; gap: 16px;">
+                {% for page in pages %}
+                    <div style="padding: 20px; background: white; border: 1px solid #e5e7eb; border-radius: 12px;">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            
+                            <!-- Page info -->
+                            <div>
+                                <h3>{{ page.name }}</h3>
+
+                                <p style="color: #6b7280; font-size: 14px;">
+                                    Slug: {{ page.slug }}
+                                </p>
+
+                                <p style="font-size: 14px; margin-top: 4px;">
+                                    {% if page.is_homepage %}
+                                        ⭐ Homepage
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <!-- Page actions -->
+                            <div style="display: flex; gap: 10px;">
+
+                                <!-- Edit -->
+                                <a href="{% url 'builder:builder_dashboard' page.id %}"
+                                   style="padding: 8px 12px; border-radius: 6px; background: #111827; color: white; text-decoration: none;">
+                                    Edit
+                                </a>
+
+                                <!-- Preview -->
+                                <a href="{% url 'preview-page' page.id %}"
+                                   target="_blank"
+                                   style="padding: 8px 12px; border-radius: 6px; background: #f59e0b; color: white; text-decoration: none;">
+                                    Preview
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="margin-top: 20px;">
+                This project has no pages yet.
+            </p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

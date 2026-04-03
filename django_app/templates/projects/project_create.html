@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Project{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 40px auto; padding: 20px;">
+    <h1>Create Project</h1>
+
+    <form method="post" style="margin-top: 24px; display: grid; gap: 16px;">
+        {% csrf_token %}
+
+        <div>
+            <label for="{{ form.name.id_for_label }}">Project Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div>{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.slug.id_for_label }}">Slug</label>
+            {{ form.slug }}
+            {% if form.slug.errors %}
+                <div>{{ form.slug.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description }}
+            {% if form.description.errors %}
+                <div>{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit">Create Project</button>
+    </form>
+</div>
+{% endblock %}

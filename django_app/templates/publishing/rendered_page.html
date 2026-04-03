@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page.name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto; padding: 40px 20px;">
+
+    {% if is_preview %}
+        <div style="margin-bottom: 24px; padding: 12px 16px; background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px;">
+            Preview Mode — only the owner can see this.
+        </div>
+    {% endif %}
+
+    {% if render_elements %}
+        {% for element in render_elements %}
+            {% if element.type == 'heading' %}
+                <h1
+                    style="
+                        font-size: {{ element.font_size }};
+                        color: {{ element.color }};
+                        text-align: {{ element.text_align }};
+                        margin-bottom: {{ element.margin_bottom }};
+                    "
+                >
+                    {{ element.content }}
+                </h1>
+
+            {% elif element.type == 'text' %}
+                <p
+                    style="
+                        font-size: {{ element.font_size }};
+                        color: {{ element.color }};
+                        text-align: {{ element.text_align }};
+                        margin-bottom: {{ element.margin_bottom }};
+                    "
+                >
+                    {{ element.content }}
+                </p>
+
+            {% elif element.type == 'button' %}
+                <div style="margin-bottom: {{ element.margin_bottom }};">
+                    <a
+                        href="{{ element.url }}"
+                        style="
+                            display: inline-block;
+                            padding: 12px 18px;
+                            border-radius: 8px;
+                            text-decoration: none;
+                            background: {{ element.background_color }};
+                            color: {{ element.color }};
+                            font-size: {{ element.font_size }};
+                        "
+                    >
+                        {{ element.content }}
+                    </a>
+                </div>
+
+            {% elif element.type == 'image' %}
+                <div style="margin-bottom: {{ element.margin_bottom }};">
+                    {% if element.image_url %}
+                        <img
+                            src="{{ element.image_url }}"
+                            alt="{{ element.alt_text }}"
+                            style="width: {{ element.width }}; max-width: 100%; border-radius: 12px;"
+                        >
+                    {% else %}
+                        <div style="padding: 40px; background: #f3f4f6; border: 1px dashed #d1d5db; border-radius: 12px;">
+                            No image selected
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>This page has no content yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

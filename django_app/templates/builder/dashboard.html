@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Builder Dashboard{% endblock %}
+
+{% block content %}
+<div class="builder-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="builder-sidebar">
+        <h2 class="panel-title">Elements</h2>
+
+        <div class="element-list">
+            <button class="element-btn" data-type="heading">Heading</button>
+            <button class="element-btn" data-type="text">Text</button>
+            <button class="element-btn" data-type="button">Button</button>
+            <button class="element-btn" data-type="image">Image</button>
+        </div>
+    </aside>
+
+    <!-- MAIN CANVAS -->
+    <main class="builder-canvas-wrapper">
+        <div class="builder-topbar">
+            <h1>Website Builder</h1>
+            <button id="save-layout-btn" class="save-btn">Save Layout</button>
+        </div>
+
+        <section id="builder-canvas" class="builder-canvas">
+            <!-- JS renders canvas -->
+        </section>
+    </main>
+
+    <!-- RIGHT PROPERTIES PANEL -->
+    <aside class="builder-properties">
+        <h2 class="panel-title">Properties</h2>
+        <div id="properties-panel">
+            <!-- JS renders properties -->
+        </div>
+    </aside>
+</div>
+
+<script>
+    const pageId = "{{ page.id }}";
+    const saveUrl = "{% url 'builder:save_page_layout' page.id %}";
+    const initialPageData = {{ page.layout_json|default:'{"elements":[]}'|safe }};
+</script>
+
+<link rel="stylesheet" href="{% static 'builder/css/dashboard.css' %}">
+<script src="{% static 'builder/js/dashboard.js' %}"></script>
+{% endblock %}
