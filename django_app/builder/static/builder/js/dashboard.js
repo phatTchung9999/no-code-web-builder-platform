@@ -1,13 +1,9 @@
 // ======================================
 // STATE
 // ======================================
-const pageData = initialPageData && initialPageData.elements
-    ? initialPageData
-    : { elements: [] };
-
+const pageData = initialPageData && initialPageData.elements ? initialPageData : { elements: [] };
 let draggedIndex = null;
 let selectedElementId = null;
-
 
 // ======================================
 // INIT
@@ -18,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     renderCanvas();
     renderPropertiesPanel();
 });
-
 
 // ======================================
 // SETUP
@@ -42,7 +37,6 @@ function setupSaveButton() {
     });
 }
 
-
 // ======================================
 // ELEMENT CREATION
 // ======================================
@@ -50,7 +44,6 @@ function addElement(type) {
     const newElement = createDefaultElement(type);
     pageData.elements.push(newElement);
     selectedElementId = newElement.id;
-
     renderCanvas();
     renderPropertiesPanel();
 }
@@ -75,7 +68,7 @@ function createDefaultElement(type) {
     }
 
     if (type === "text") {
-        baseElement.content = "This is a text block. Edit me from the properties panel.";
+        baseElement.content = "This is a text block.\nEdit me from the properties panel.";
         baseElement.styles = {
             fontSize: "16px",
             color: "#374151",
@@ -118,7 +111,6 @@ function generateId() {
     return "el_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
 }
 
-
 // ======================================
 // LOOKUPS
 // ======================================
@@ -133,7 +125,6 @@ function getSelectedElement() {
 function getElementById(elementId) {
     return pageData.elements.find((element) => element.id === elementId) || null;
 }
-
 
 // ======================================
 // CANVAS RENDER
@@ -163,15 +154,13 @@ function renderCanvas() {
         }
 
         wrapper.innerHTML = `
-            <div class="element-toolbar">
-                <button class="element-action-btn delete-btn" data-index="${index}">
-                    Delete
-                </button>
+            <div class="builder-element-toolbar">
+                <button class="delete-btn" data-index="${index}" type="button">Delete</button>
             </div>
 
-            <div class="element-label">${escapeHtml(element.type)}</div>
+            <div class="builder-element-label">${escapeHtml(element.type)}</div>
 
-            <div class="element-render-area">
+            <div class="builder-element-content">
                 ${renderElementHTML(element)}
             </div>
         `;
@@ -194,7 +183,7 @@ function renderElementHTML(element) {
 
     if (element.type === "text") {
         return `
-            <p style="${styleString}">
+            <p style="${styleString}; white-space: pre-wrap;">
                 ${escapeHtml(element.content || "Text")}
             </p>
         `;
@@ -204,10 +193,8 @@ function renderElementHTML(element) {
         const url = element.settings?.url || "#";
 
         return `
-            <a href="${escapeHtml(url)}" style="text-decoration: none;" onclick="return false;">
-                <button style="${styleString}; border: none; cursor: pointer;">
-                    ${escapeHtml(element.content || "Button")}
-                </button>
+            <a href="${escapeHtml(url)}" style="${styleString}">
+                ${escapeHtml(element.content || "Button")}
             </a>
         `;
     }
@@ -217,17 +204,14 @@ function renderElementHTML(element) {
         const alt = element.settings?.alt || "Image";
 
         return `
-            <img
-                src="${escapeHtml(src)}"
-                alt="${escapeHtml(alt)}"
-                style="${styleString}"
-            />
+            <img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="${styleString}">
         `;
     }
 
-    return `<div>Unknown element type</div>`;
+    return `
+        <div>Unknown element type</div>
+    `;
 }
-
 
 // ======================================
 // ELEMENT EVENTS
@@ -246,7 +230,6 @@ function attachSelectionEvent(wrapper) {
 
         const elementId = wrapper.dataset.id;
         selectedElementId = elementId;
-
         renderCanvas();
         renderPropertiesPanel();
     });
@@ -257,7 +240,6 @@ function attachDeleteEvent(wrapper) {
 
     deleteButton.addEventListener("click", function (event) {
         event.stopPropagation();
-
         const index = Number(deleteButton.dataset.index);
         deleteElement(index);
     });
@@ -279,7 +261,6 @@ function deleteElement(index) {
     renderPropertiesPanel();
 }
 
-
 // ======================================
 // DRAG AND DROP
 // ======================================
@@ -294,9 +275,7 @@ function attachDragEvents(elementNode) {
 function handleDragStart(event) {
     const target = event.currentTarget;
     draggedIndex = Number(target.dataset.index);
-
     target.classList.add("dragging");
-
     event.dataTransfer.effectAllowed = "move";
     event.dataTransfer.setData("text/plain", draggedIndex);
 }
@@ -324,7 +303,6 @@ function handleDrop(event) {
 
     const target = event.currentTarget;
     const targetIndex = Number(target.dataset.index);
-
     target.classList.remove("drag-over");
 
     if (draggedIndex === null || draggedIndex === targetIndex) {
@@ -360,7 +338,6 @@ function moveElement(fromIndex, toIndex) {
     elements.splice(toIndex, 0, movedItem);
 }
 
-
 // ======================================
 // PROPERTIES PANEL
 // ======================================
@@ -370,9 +347,9 @@ function renderPropertiesPanel() {
 
     if (!selectedElement) {
         panel.innerHTML = `
-            <p class="properties-placeholder">
+            <div class="empty-properties">
                 Select an element to edit its properties.
-            </p>
+            </div>
         `;
         return;
     }
@@ -383,133 +360,97 @@ function renderPropertiesPanel() {
 
 function buildPropertiesPanelHTML(element) {
     let html = `
-        <div class="properties-form">
-            <div class="property-section">
-                <h3 class="property-section-title">Element</h3>
-
-                <div class="form-group">
-                    <label>Type</label>
-                    <input type="text" value="${escapeHtml(element.type)}" disabled>
-                </div>
-            </div>
+        <div class="prop-group">
+            <h3>Element</h3>
+            <p><strong>Type:</strong> ${escapeHtml(element.type)}</p>
+        </div>
     `;
 
     if (element.type === "heading" || element.type === "text" || element.type === "button") {
         html += `
-            <div class="property-section">
-                <h3 class="property-section-title">Content</h3>
-
-                <div class="form-group">
-                    <label for="prop-content">Text</label>
-                    <textarea id="prop-content">${escapeHtml(element.content || "")}</textarea>
-                </div>
+            <div class="prop-group">
+                <h3>Content</h3>
+                <label for="prop-content">Text</label>
+                <textarea id="prop-content" rows="4">${escapeHtml(element.content || "")}</textarea>
             </div>
         `;
     }
 
     if (element.type === "image") {
         html += `
-            <div class="property-section">
-                <h3 class="property-section-title">Image</h3>
+            <div class="prop-group">
+                <h3>Image</h3>
+                <label for="prop-src">Image URL</label>
+                <input id="prop-src" type="text" value="${escapeHtml(element.settings?.src || "")}">
 
-                <div class="form-group">
-                    <label for="prop-src">Image URL</label>
-                    <input id="prop-src" type="text" value="${escapeHtml(element.settings?.src || "")}">
-                </div>
-
-                <div class="form-group">
-                    <label for="prop-alt">Alt Text</label>
-                    <input id="prop-alt" type="text" value="${escapeHtml(element.settings?.alt || "")}">
-                </div>
+                <label for="prop-alt">Alt Text</label>
+                <input id="prop-alt" type="text" value="${escapeHtml(element.settings?.alt || "")}">
             </div>
         `;
     }
 
     if (element.type === "button") {
         html += `
-            <div class="property-section">
-                <h3 class="property-section-title">Button Settings</h3>
-
-                <div class="form-group">
-                    <label for="prop-url">Button URL</label>
-                    <input id="prop-url" type="text" value="${escapeHtml(element.settings?.url || "#")}">
-                </div>
+            <div class="prop-group">
+                <h3>Button Settings</h3>
+                <label for="prop-url">Button URL</label>
+                <input id="prop-url" type="text" value="${escapeHtml(element.settings?.url || "")}">
             </div>
         `;
     }
 
     html += `
-        <div class="property-section">
-            <h3 class="property-section-title">Styles</h3>
+        <div class="prop-group">
+            <h3>Styles</h3>
 
-            <div class="form-group">
-                <label for="prop-font-size">Font Size</label>
-                <input id="prop-font-size" type="text" value="${escapeHtml(element.styles?.fontSize || "")}" placeholder="16px">
-            </div>
+            <label for="prop-font-size">Font Size</label>
+            <input id="prop-font-size" type="text" value="${escapeHtml(element.styles?.fontSize || "")}">
 
-            <div class="form-group">
-                <label for="prop-color">Text Color</label>
-                <input id="prop-color" type="text" value="${escapeHtml(element.styles?.color || "")}" placeholder="#111827">
-            </div>
+            <label for="prop-color">Text Color</label>
+            <input id="prop-color" type="text" value="${escapeHtml(element.styles?.color || "")}">
 
-            <div class="form-group">
-                <label for="prop-text-align">Text Align</label>
-                <select id="prop-text-align">
-                    <option value="left" ${element.styles?.textAlign === "left" ? "selected" : ""}>Left</option>
-                    <option value="center" ${element.styles?.textAlign === "center" ? "selected" : ""}>Center</option>
-                    <option value="right" ${element.styles?.textAlign === "right" ? "selected" : ""}>Right</option>
-                </select>
-            </div>
+            <label for="prop-text-align">Text Align</label>
+            <select id="prop-text-align">
+                <option value="left" ${element.styles?.textAlign === "left" ? "selected" : ""}>Left</option>
+                <option value="center" ${element.styles?.textAlign === "center" ? "selected" : ""}>Center</option>
+                <option value="right" ${element.styles?.textAlign === "right" ? "selected" : ""}>Right</option>
+            </select>
 
-            <div class="form-group">
-                <label for="prop-margin-bottom">Margin Bottom</label>
-                <input id="prop-margin-bottom" type="text" value="${escapeHtml(element.styles?.marginBottom || "")}" placeholder="16px">
-            </div>
+            <label for="prop-margin-bottom">Margin Bottom</label>
+            <input id="prop-margin-bottom" type="text" value="${escapeHtml(element.styles?.marginBottom || "")}">
         </div>
     `;
 
     if (element.type === "button") {
         html += `
-            <div class="property-section">
-                <h3 class="property-section-title">Button Styles</h3>
+            <div class="prop-group">
+                <h3>Button Styles</h3>
 
-                <div class="form-group">
-                    <label for="prop-bg-color">Background Color</label>
-                    <input id="prop-bg-color" type="text" value="${escapeHtml(element.styles?.backgroundColor || "")}" placeholder="#2563eb">
-                </div>
+                <label for="prop-bg-color">Background Color</label>
+                <input id="prop-bg-color" type="text" value="${escapeHtml(element.styles?.backgroundColor || "")}">
 
-                <div class="form-group">
-                    <label for="prop-padding">Padding</label>
-                    <input id="prop-padding" type="text" value="${escapeHtml(element.styles?.padding || "")}" placeholder="12px 20px">
-                </div>
+                <label for="prop-padding">Padding</label>
+                <input id="prop-padding" type="text" value="${escapeHtml(element.styles?.padding || "")}">
 
-                <div class="form-group">
-                    <label for="prop-radius">Border Radius</label>
-                    <input id="prop-radius" type="text" value="${escapeHtml(element.styles?.borderRadius || "")}" placeholder="8px">
-                </div>
+                <label for="prop-radius">Border Radius</label>
+                <input id="prop-radius" type="text" value="${escapeHtml(element.styles?.borderRadius || "")}">
             </div>
         `;
     }
 
     if (element.type === "image") {
         html += `
-            <div class="property-section">
-                <h3 class="property-section-title">Image Styles</h3>
+            <div class="prop-group">
+                <h3>Image Styles</h3>
 
-                <div class="form-group">
-                    <label for="prop-width">Width</label>
-                    <input id="prop-width" type="text" value="${escapeHtml(element.styles?.width || "")}" placeholder="300px">
-                </div>
+                <label for="prop-width">Width</label>
+                <input id="prop-width" type="text" value="${escapeHtml(element.styles?.width || "")}">
 
-                <div class="form-group">
-                    <label for="prop-image-radius">Border Radius</label>
-                    <input id="prop-image-radius" type="text" value="${escapeHtml(element.styles?.borderRadius || "")}" placeholder="12px">
-                </div>
+                <label for="prop-image-radius">Border Radius</label>
+                <input id="prop-image-radius" type="text" value="${escapeHtml(element.styles?.borderRadius || "")}">
             </div>
         `;
     }
-
-    html += `</div>`;
 
     return html;
 }
@@ -519,16 +460,13 @@ function attachPropertiesPanelEvents(element) {
     const srcInput = document.getElementById("prop-src");
     const altInput = document.getElementById("prop-alt");
     const urlInput = document.getElementById("prop-url");
-
     const fontSizeInput = document.getElementById("prop-font-size");
     const colorInput = document.getElementById("prop-color");
     const textAlignInput = document.getElementById("prop-text-align");
     const marginBottomInput = document.getElementById("prop-margin-bottom");
-
     const bgColorInput = document.getElementById("prop-bg-color");
     const paddingInput = document.getElementById("prop-padding");
     const radiusInput = document.getElementById("prop-radius");
-
     const widthInput = document.getElementById("prop-width");
     const imageRadiusInput = document.getElementById("prop-image-radius");
 
@@ -611,7 +549,6 @@ function attachPropertiesPanelEvents(element) {
     }
 }
 
-
 // ======================================
 // UPDATE SELECTED ELEMENT
 // ======================================
@@ -656,7 +593,6 @@ function updateSelectedElementSetting(key, value) {
     renderCanvas();
 }
 
-
 // ======================================
 // SAVE
 // ======================================
@@ -669,7 +605,7 @@ async function saveLayout() {
                 "X-CSRFToken": getCSRFToken()
             },
             body: JSON.stringify({
-                layout_json: pageData
+                layout: pageData
             })
         });
 
@@ -685,7 +621,6 @@ async function saveLayout() {
         alert("Something went wrong while saving");
     }
 }
-
 
 // ======================================
 // HELPERS

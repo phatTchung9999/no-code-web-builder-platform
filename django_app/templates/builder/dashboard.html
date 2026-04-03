@@ -2,8 +2,13 @@
 {% load static %}
 
 {% block title %}Builder Dashboard{% endblock %}
-
 {% block content %}
+<div class="page-top-actions">
+    <a href="{% url 'project-list' %}" class="back-btn">← Main App</a>
+    <button type="button" class="back-btn secondary-btn" onclick="history.back()">
+        ← Previous Page
+    </button>
+</div>
 <div class="builder-layout">
 
     <!-- LEFT SIDEBAR -->
@@ -33,18 +38,21 @@
     <!-- RIGHT PROPERTIES PANEL -->
     <aside class="builder-properties">
         <h2 class="panel-title">Properties</h2>
+
         <div id="properties-panel">
             <!-- JS renders properties -->
         </div>
     </aside>
+
 </div>
 
 <script>
     const pageId = "{{ page.id }}";
     const saveUrl = "{% url 'builder:save_page_layout' page.id %}";
-    const initialPageData = {{ page.layout_json|default:'{"elements":[]}'|safe }};
+    const initialPageData = {{ page.layout|default:'{"elements":[]}'|safe }};
 </script>
 
 <link rel="stylesheet" href="{% static 'builder/css/dashboard.css' %}">
 <script src="{% static 'builder/js/dashboard.js' %}"></script>
+
 {% endblock %}

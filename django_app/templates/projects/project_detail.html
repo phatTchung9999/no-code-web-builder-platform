@@ -3,8 +3,11 @@
 {% block title %}{{ project.name }}{% endblock %}
 
 {% block content %}
-<div style="max-width: 900px; margin: 40px auto; padding: 20px;">
-
+    <div style="max-width: 900px; margin: 40px auto; padding: 20px;">
+        <div class="page-top-actions">
+        <a href="{% url 'project-list' %}" class="back-btn">← Back to Projects</a>
+        <a href="{% url 'home' %}" class="back-btn secondary-btn">← Home</a>
+    </div>
     <!-- HEADER -->
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
         <div>

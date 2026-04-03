@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('projects.urls')),
     path('builder/', include(('builder.urls', 'builder'), namespace='builder')),
     path('', include('publishing.urls')),
+    path('', include('core.urls')),
 ]

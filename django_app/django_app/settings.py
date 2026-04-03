@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'builder',
     'projects',
     'publishing',
+    'core',
 ]
 
 MIDDLEWARE = [

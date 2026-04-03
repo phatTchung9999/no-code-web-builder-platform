@@ -27,7 +27,6 @@ class DashboardView(LoginRequiredMixin, View):
             'page': page,
             'project': page.project,
         }
-
         return render(request, 'builder/dashboard.html', context)
 
 
@@ -105,8 +104,7 @@ class PageCreateView(LoginRequiredMixin, View):
                 page.layout = {"elements": []}
 
             page.save()
-
-            return redirect('builder-dashboard', page_id=page.id)
+            return redirect('builder:builder_dashboard', page_id=page.id)
 
         context = {
             'project': project,

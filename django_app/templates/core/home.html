@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}No-Code Web Builder{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-content">
+        <p class="hero-badge">Build websites without coding</p>
+
+        <h1 class="hero-title">
+            Create your website with drag-and-drop
+        </h1>
+
+        <p class="hero-text">
+            A simple no-code platform where users can create pages, arrange elements,
+            and publish websites without writing code.
+        </p>
+
+        <div class="hero-actions">
+            {% if user.is_authenticated %}
+                <a href="{% url 'project-list' %}" class="btn-primary">
+                    Go to My Projects
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn-primary">
+                    Start Building
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="features-header">
+        <h2>Why use this platform?</h2>
+        <p>Simple tools for building your site faster.</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Drag and Drop</h3>
+            <p>Add headings, text, buttons, and images easily.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Easy Editing</h3>
+            <p>Change content and styles from the properties panel.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Project Based</h3>
+            <p>Organize multiple websites and pages in one place.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
