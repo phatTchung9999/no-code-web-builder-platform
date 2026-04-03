@@ -5,29 +5,31 @@ A full-stack no-code website builder that allows users to create, edit, and publ
 This project is designed as a scalable, production-ready system built with a modern architecture combining Django and FastAPI.
 
 ---
+## Status
+In Progress
 
-## 🚀 Features
+## Features
 
-### 🧩 Visual Builder
+### Visual Builder
 
 * Drag-and-drop page editor
 * Real-time canvas rendering
 * Element selection and editing
 * Dynamic properties panel
 
-### 🏗️ Page & Project System
+### Page & Project System
 
 * Create projects and pages from UI
 * Multi-page website structure
 * Page-level layout storage using JSON
 
-### 🎨 Element System
+### Element System
 
 * Heading, text, button, image elements
 * Custom styles and settings per element
 * Extensible schema for future components
 
-### 💾 Layout Engine
+### Layout Engine
 
 * Page structure stored as JSON:
 
@@ -45,7 +47,7 @@ This project is designed as a scalable, production-ready system built with a mod
 }
 ```
 
-### 🌐 Publishing System
+### Publishing System
 
 * Preview pages before publishing
 * Public rendering of pages
@@ -53,7 +55,7 @@ This project is designed as a scalable, production-ready system built with a mod
 
 ---
 
-## 🧠 Architecture
+## Architecture
 
 ### Backend
 
@@ -77,7 +79,7 @@ This project is designed as a scalable, production-ready system built with a mod
 
 ---
 
-## 🔄 Core Concept
+## Core Concept
 
 All changes follow this pattern:
 
@@ -91,7 +93,7 @@ This ensures consistency between:
 
 ---
 
-## 📦 Tech Stack
+## Tech Stack
 
 * Django
 * FastAPI (planned)
@@ -100,7 +102,7 @@ This ensures consistency between:
 
 ---
 
-## 🛠️ Current Progress
+## Current Progress
 
 * Project & page system
 * JSON layout engine
@@ -111,7 +113,7 @@ This ensures consistency between:
 
 ---
 
-## 🔮 Roadmap
+## Roadmap
 
 * Schema-driven element system
 * Nested layout (sections, columns)
@@ -122,24 +124,24 @@ This ensures consistency between:
 
 ---
 
-## 🎯 Vision
+## Vision
 
 The goal of this project is to build a scalable no-code platform that enables anyone to create websites without writing code, while maintaining a clean and extensible architecture for future growth.
 
 ---
 
-## 📸 Preview
+## Preview
 
 (Add screenshots here later)
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 Phat Chung
 
 ---
 
-## ⭐ Notes
+## Notes
 
 This project focuses on building real-world architecture and scalable systems rather than quick prototypes.
