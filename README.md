@@ -128,11 +128,6 @@ This ensures consistency between:
 
 The goal of this project is to build a scalable no-code platform that enables anyone to create websites without writing code, while maintaining a clean and extensible architecture for future growth.
 
----
-
-## Preview
-
-(Add screenshots here later)
 
 ---
 
@@ -140,8 +135,6 @@ The goal of this project is to build a scalable no-code platform that enables an
 
 Phat Chung
 
----
 
-## Notes
 
-This project focuses on building real-world architecture and scalable systems rather than quick prototypes.
+
